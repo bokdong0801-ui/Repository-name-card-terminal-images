@@ -1,0 +1,44 @@
+name: Import card terminal images
+
+on:
+  push:
+    paths:
+      - '.github/workflows/import-images.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  import-images:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Download card terminal images
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p images
+          curl -L --fail --retry 3 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2F26trJ%2FdJMcag0WBnl%2FAAAAAAAAAAAAAAAAAAAAACYj7J23ToCooywxtjPckprq848YTAmG1Yd175Y-utu8%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DKdRWOfAUR6sO6MdtnTsGn67mj3M%253D' -o images/card-terminal-part-1.jpg
+          curl -L --fail --retry 3 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FcM23El%2FdJMcafOHkPP%2FAAAAAAAAAAAAAAAAAAAAAAIc5E5nEttYAWpe2VmozNfr4yNsG8zEXjH_g913TeOz%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DxgCFUtXRJ5SrOADzeyqmUuFM9QY%253D' -o images/card-terminal-part-2.jpg
+          curl -L --fail --retry 3 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2Fd13Igj%2FdJMcafOHkPX%2FAAAAAAAAAAAAAAAAAAAAAO-jhMuSJvRvOCi0CGuUim5FDpbDAGFg-YcAP_OtaHwk%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3D8W7VFMHsjCzRla1Vfh4yeigJBfQ%253D' -o images/card-terminal-part-3.jpg
+          curl -L --fail --retry 3 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FcfHEyK%2FdJMcabrTelf%2FAAAAAAAAAAAAAAAAAAAAANSgjgajoeYpmBsQ8ZOAFBxK-S0CdWbScekGXu_neogq%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DyGWyDSmSopVW82YoQmG4yHmSP8k%253D' -o images/card-terminal-part-4.jpg
+          curl -L --fail --retry 3 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FVAnfL%2FdJMcafOHkQh%2FAAAAAAAAAAAAAAAAAAAAALDfs6QbHnoDABKv8ip014XCzr7-Y5a5TBRf0ilB7fw9%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3Dwq%252BpiFZTPXmjGErkLdD0TCXQfT0%253D' -o images/card-terminal-part-5.jpg
+          test -s images/card-terminal-part-1.jpg
+          test -s images/card-terminal-part-2.jpg
+          test -s images/card-terminal-part-3.jpg
+          test -s images/card-terminal-part-4.jpg
+          test -s images/card-terminal-part-5.jpg
+
+      - name: Commit downloaded images
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add images
+          if ! git diff --cached --quiet; then
+            git commit -m 'Add card terminal images'
+            git push
+          fi
